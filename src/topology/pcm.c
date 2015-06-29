@@ -482,11 +482,13 @@ int tplg_parse_pcm_cap_cfg(snd_tplg_t *tplg, snd_config_t *cfg,
 
 	tplg_dbg("\t%s:\n", id);
 
-	if (strcmp(id, "playback") == 0)
+	if (strcmp(id, "playback") == 0) {
 		stream = SND_SOC_TPLG_STREAM_PLAYBACK;
-	else if (strcmp(id, "capture") == 0)
+		pcm_dai->playback = 1;
+	} else if (strcmp(id, "capture") == 0) {
 		stream = SND_SOC_TPLG_STREAM_CAPTURE;
-	else
+		pcm_dai->capture = 1;
+	} else
 		return -EINVAL;
 
 	snd_config_for_each(i, next, cfg) {

@@ -19,36 +19,6 @@
 #include "list.h"
 #include "tplg_local.h"
 
-/* mapping of format text names to types */
-static const struct map_elem pcm_format_map[] = {
-	{"S16_LE", SNDRV_PCM_FORMAT_S16_LE},
-	{"S16_BE", SNDRV_PCM_FORMAT_S16_BE},
-	{"U16_LE", SNDRV_PCM_FORMAT_U16_LE},
-	{"U16_BE", SNDRV_PCM_FORMAT_U16_BE},
-	{"S24_LE", SNDRV_PCM_FORMAT_S24_LE},
-	{"S24_BE", SNDRV_PCM_FORMAT_S24_BE},
-	{"U24_LE", SNDRV_PCM_FORMAT_U24_LE},
-	{"U24_BE", SNDRV_PCM_FORMAT_U24_BE},
-	{"S32_LE", SNDRV_PCM_FORMAT_S32_LE},
-	{"S32_BE", SNDRV_PCM_FORMAT_S32_BE},
-	{"U32_LE", SNDRV_PCM_FORMAT_U32_LE},
-	{"U32_BE", SNDRV_PCM_FORMAT_U32_BE},
-};
-
-static int lookup_pcm_format(const char *c, snd_pcm_format_t *format)
-{
-	unsigned int i;
-
-	for (i = 0; i < ARRAY_SIZE(pcm_format_map); i++) {
-		if (strcmp(pcm_format_map[i].name, c) == 0) {
-			*format = pcm_format_map[i].id;
-			return 0;
-		}
-	}
-
-	return -EINVAL;
-}
-
 struct tplg_elem *lookup_pcm_dai_stream(struct list_head *base, const char* id)
 {
 	struct list_head *pos, *npos;
@@ -223,8 +193,8 @@ static int tplg_parse_stream_cfg(snd_tplg_t *tplg ATTRIBUTE_UNUSED,
 			return -EINVAL;
 
 		if (strcmp(id, "format") == 0) {
-			ret = lookup_pcm_format(val, &format);
-			if (ret < 0) {
+			format = snd_pcm_format_value(val);
+			if (format == SND_PCM_FORMAT_UNKNOWN) {
 				fprintf(stderr, "error: unsupported stream format %s\n",
 					val);
 				return -EINVAL;
@@ -320,8 +290,8 @@ static int split_format(struct snd_soc_tplg_stream_caps *caps, char *str)
 
 	s = strtok(str, ",");
 	while ((s != NULL) && (i < SND_SOC_TPLG_MAX_FORMATS)) {
-		ret = lookup_pcm_format(s, &format);
-		if (ret < 0) {
+		format = snd_pcm_format_value(s);
+		if (format == SND_PCM_FORMAT_UNKNOWN) {
 			fprintf(stderr, "error: unsupported stream format %s\n", s);
 			return -EINVAL;
 		}

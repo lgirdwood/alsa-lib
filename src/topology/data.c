@@ -56,6 +56,11 @@ static int tplg_parse_data_file(snd_config_t *cfg, struct tplg_elem *elem)
 		ret = -EINVAL;
 		goto err;
 	}
+	if (size > TPLG_MAX_PRIV_SIZE) {
+		fprintf(stderr, "error: data file too big %zu\n", size);
+		ret = -EINVAL;
+		goto err;
+	}
 
 	priv = calloc(1, sizeof(*priv) + size);
 	if (!priv) {
@@ -191,6 +196,11 @@ static int tplg_parse_data_hex(snd_config_t *cfg, struct tplg_elem *elem,
 	num = get_hex_num(value);
 	size = num * width;
 	priv = elem->data;
+
+	if (esize > TPLG_MAX_PRIV_SIZE) {
+		fprintf(stderr, "error: data too big %d\n", esize);
+		return -EINVAL;
+	}
 
 	if (priv != NULL) {
 		off = priv->size;

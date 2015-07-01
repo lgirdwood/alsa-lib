@@ -317,6 +317,7 @@ int tplg_parse_control_bytes(snd_tplg_t *tplg,
 	snd_config_iterator_t i, next;
 	snd_config_t *n;
 	const char *id, *val = NULL;
+	int err;
 
 	elem = tplg_elem_new_common(tplg, cfg, PARSER_TYPE_BYTES);
 	if (!elem)
@@ -393,6 +394,20 @@ int tplg_parse_control_bytes(snd_tplg_t *tplg,
 			tplg_dbg("\t%s: %s\n", id, val);
 			continue;
 		}
+
+		if (strcmp(id, "tlv") == 0) {
+			if (snd_config_get_string(n, &val) < 0)
+				return -EINVAL;
+
+			err = tplg_ref_add(elem, PARSER_TYPE_TLV, val);
+			if (err < 0)
+				return err;
+
+			be->hdr.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |
+				SNDRV_CTL_ELEM_ACCESS_READWRITE;
+			tplg_dbg("\t%s: %s\n", id, val);
+			continue;
+		}
 	}
 
 	return 0;
@@ -434,8 +449,6 @@ int tplg_parse_control_enum(snd_tplg_t *tplg, snd_config_t *cfg,
 	/* init new mixer */
 	ec = elem->enum_ctrl;
 	strncpy(ec->hdr.name, elem->id, SNDRV_CTL_ELEM_ID_NAME_MAXLEN);
-	ec->hdr.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |
-		SNDRV_CTL_ELEM_ACCESS_READWRITE;
 	ec->hdr.type =  SND_SOC_TPLG_TYPE_ENUM;
 	ec->size = elem->size;
 	tplg->channel_idx = 0;
@@ -554,8 +567,6 @@ int tplg_parse_control_mixer(snd_tplg_t *tplg,
 	/* init new mixer */
 	mc = elem->mixer_ctrl;
 	strncpy(mc->hdr.name, elem->id, SNDRV_CTL_ELEM_ID_NAME_MAXLEN);
-	mc->hdr.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |
-		SNDRV_CTL_ELEM_ACCESS_READWRITE;
 	mc->hdr.type =  SND_SOC_TPLG_TYPE_MIXER;
 	mc->size = elem->size;
 	tplg->channel_idx = 0;
@@ -641,6 +652,8 @@ int tplg_parse_control_mixer(snd_tplg_t *tplg,
 			if (err < 0)
 				return err;
 
+			mc->hdr.access = SNDRV_CTL_ELEM_ACCESS_TLV_READ |
+				SNDRV_CTL_ELEM_ACCESS_READWRITE;
 			tplg_dbg("\t%s: %s\n", id, val);
 			continue;
 		}

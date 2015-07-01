@@ -285,6 +285,7 @@ static int tplg_parse_line(const char *text,
 	const char *source = NULL, *sink = NULL, *control = NULL;
 
 	strncpy(buf, text, LINE_SIZE);
+	buf[LINE_SIZE - 1] = 0;
 
 	len = strlen(buf);
 	if (len <= 2) {
@@ -435,6 +436,7 @@ int tplg_parse_dapm_widget(snd_tplg_t *tplg,
 
 	widget = elem->widget;
 	strncpy(widget->name, elem->id, SNDRV_CTL_ELEM_ID_NAME_MAXLEN);
+	widget->name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN - 1] = 0;
 	widget->size = elem->size;
 
 	snd_config_for_each(i, next, cfg) {

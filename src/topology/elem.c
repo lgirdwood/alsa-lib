@@ -28,6 +28,7 @@ int tplg_ref_add(struct tplg_elem *elem, int type, const char* id)
 		return -ENOMEM;
 
 	strncpy(ref->id, id, SNDRV_CTL_ELEM_ID_NAME_MAXLEN);
+	ref->id[SNDRV_CTL_ELEM_ID_NAME_MAXLEN - 1] = 0;
 	ref->type = type;
 
 	list_add_tail(&ref->list, &elem->ref_list);
@@ -115,6 +116,7 @@ struct tplg_elem* tplg_elem_new_common(snd_tplg_t *tplg,
 
 	snd_config_get_id(cfg, &id);
 	strncpy(elem->id, id, SNDRV_CTL_ELEM_ID_NAME_MAXLEN);
+	elem->id[SNDRV_CTL_ELEM_ID_NAME_MAXLEN - 1] = 0;
 
 	switch (type) {
 	case PARSER_TYPE_DATA:

@@ -36,6 +36,53 @@ extern "C" {
  *
  * ALSA Topology Interface
  *
+ * The topology interface allows developers to define DSP topologies in a text
+ * file format and to convert the text topology to a binary topology
+ * representation that can be understood by the kernel. The topology core
+ * currently recognises the following object types :-
+ *
+ *  * Controls (mixer, enumerated and byte) including TLV data.
+ *  * PCMs (FE and BE configurations and capabilities)
+ *  * DAPM widgets
+ *  * DAPM graph elements.
+ *  * Private data for each object type.
+ *  * Manifest (containing count of each object type)
+ *
+ * The text format uses the standard ALSA configuration file format to
+ * describe each topology object type :-
+ *
+ * Controls can contain TLV data, private data and enumerated controls and can
+ * are defined in the following sections.
+ *
+ * Control Operations can come from the standard names (listed below) or
+ * bespoke driver controls with numbers >= 256
+ *
+ * ops."name" {
+ *	info "volsw"
+ *	get "256"
+ *	put "256"
+ * }
+ *
+ * The Standrd operations names for control get(), put() and info calls are
+ * "volsw","volsw_sx","volsw_xr_sx","enum","bytes","enum_value","range","strobe".
+
+ ** SectionControlMixer."control name" {
+ *	comment "optional comments"
+ *
+ *	index "1"
+ *
+ *	channel."name" {
+ *	}
+ *
+ *	ops."ctl" {
+ *	}
+ *
+ *	max "32"
+ *	invert "0"
+ *
+ *
+ *	tlv "hsw_vol_tlv"
+ * }
  */
 
 typedef struct snd_tplg snd_tplg_t;

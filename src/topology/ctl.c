@@ -538,26 +538,6 @@ int tplg_parse_control_enum(snd_tplg_t *tplg, snd_config_t *cfg,
 /* Parse Controls.
  *
  * Mixer control. Supports multiple channels.
- *
- * SectionControlMixer."control name" {
- *	comment "optional comments"
- *
- *	index "1"
- *
- *	channel."name" {
- *	}
- *
- *	ops."ctl" {
- *	}
- *
- *	max "32"
- *	invert "0"
- *
- *	ops."ctl" {
- *	}
- *
- *	tlv "hsw_vol_tlv"
- * }
  */
 int tplg_parse_control_mixer(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)

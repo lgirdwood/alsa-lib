@@ -46,12 +46,6 @@ static int lookup_ops(const char *c)
 
 /* Parse Control operations. Ops can come from standard names above or
  * bespoke driver controls with numbers >= 256
- *
- * ops."name" {
- *	info "volsw"
- *	get "256"
- *	put "256"
- * }
  */
 int tplg_parse_ops(snd_tplg_t *tplg ATTRIBUTE_UNUSED,
 	snd_config_t *cfg, void *private)

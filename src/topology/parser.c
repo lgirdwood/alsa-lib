@@ -260,7 +260,8 @@ static int tplg_build_integ(snd_tplg_t *tplg)
 	return err;
 }
 
-int snd_tplg_build(snd_tplg_t *tplg, const char *infile, const char *outfile)
+int snd_tplg_build_file(snd_tplg_t *tplg, const char *infile,
+	const char *outfile)
 {
 	snd_config_t *cfg = NULL;
 	int err = 0;

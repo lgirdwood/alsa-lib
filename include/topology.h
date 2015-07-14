@@ -59,7 +59,8 @@ void snd_tplg_free(snd_tplg_t *tplg);
  * \param outfile Binary topology output file.
  * \return Zero on sucess, otherwise a negative error code
  */
-int snd_tplg_build(snd_tplg_t *tplg, const char *infile, const char *outfile);
+int snd_tplg_build_file(snd_tplg_t *tplg, const char *infile,
+	const char *outfile);
 
 /**
  * \brief Enable verbose reporting of binary file output

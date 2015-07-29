@@ -487,6 +487,15 @@ int tplg_parse_dapm_widget(snd_tplg_t *tplg,
 			continue;
 		}
 
+		if (strcmp(id, "reg") == 0) {
+			if (snd_config_get_string(n, &val) < 0)
+				return -EINVAL;
+
+			widget->reg = atoi(val);
+			tplg_dbg("\t%s: %d\n", id, widget->reg);
+			continue;
+		}
+
 		if (strcmp(id, "invert") == 0) {
 			if (snd_config_get_string(n, &val) < 0)
 				return -EINVAL;

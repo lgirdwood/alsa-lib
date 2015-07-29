@@ -257,16 +257,6 @@ static int tplg_parse_data_hex(snd_config_t *cfg, struct tplg_elem *elem,
  *
  * Object private data can either be from file or defined as bytes, shorts,
  * words.
- *
- * SectionData."data name" {
- *
- *		DataFile "filename"
- *		bytes "0x12,0x34,0x56,0x78"
- *		shorts "0x1122,0x3344,0x5566,0x7788"
- *		words "0xaabbccdd,0x11223344,0x66aa77bb,0xefef1234"
- *		index "1"
- *		type "7"
- * }
  */
 int tplg_parse_data(snd_tplg_t *tplg, snd_config_t *cfg,
 	void *private ATTRIBUTE_UNUSED)

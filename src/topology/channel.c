@@ -72,13 +72,7 @@ static int lookup_channel(const char *c)
 	return -EINVAL;
 }
 
-/* Parse a channel.
- *
- * channel."channel_map.name" {
- *		reg "0"	(register)
- *		shift "0" (shift)
- * }
- */
+/* Parse a channel mapping. */
 int tplg_parse_channel(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private)
 {

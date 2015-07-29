@@ -147,17 +147,7 @@ int tplg_build_pcm_dai(snd_tplg_t *tplg, unsigned int type)
 	return 0;
 }
 
-/* PCM stream configuration
- *
- * Describes the PCM configuration for playback and capture streams.
- *
- *	config."name" {
- *		format "S24_LE"
- *		rate "48000"
- *		channels "2"
- *		tdm_slot "0xf"
- *      }
- */
+/* PCM stream configuration */
 static int tplg_parse_stream_cfg(snd_tplg_t *tplg ATTRIBUTE_UNUSED,
 	snd_config_t *cfg, void *private)
 {
@@ -227,19 +217,7 @@ static int tplg_parse_stream_cfg(snd_tplg_t *tplg ATTRIBUTE_UNUSED,
 	return 0;
 }
 
-/* Parse pcm configuration
- *
- * SectionPCMConfig."PCM config name" {
- *
- *	config."playback" {
- *
- *	}
- *
- *	config."capture" {
- *
- *	}
- * }
- */
+/* Parse pcm configuration */
 int tplg_parse_pcm_config(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)
 {
@@ -304,17 +282,7 @@ static int split_format(struct snd_soc_tplg_stream_caps *caps, char *str)
 	return 0;
 }
 
-/* Parse pcm Capabilities
- *
- * SectionPCMCapabilities." PCM capabilities name" {
- *
- *	formats "S24_LE,S16_LE"
- *	rate_min "48000"
- *	rate_max "48000"
- *	channels_min "2"
- *	channels_max "2"
- * }
- */
+/* Parse pcm Capabilities */
 int tplg_parse_pcm_caps(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)
 {
@@ -417,18 +385,7 @@ static int tplg_parse_pcm_cfg(snd_tplg_t *tplg ATTRIBUTE_UNUSED,
 	return 0;
 }
 
-/* Parse the cap and config of a pcm.
- *
- * pcm."name" {
- *
- *		capabilities "System playback"
- *
- *		configs [
- *			"PCM 48k Stereo 24bit"
- *			"PCM 48k Stereo 16bit"
- *		]
- * }
- */
+/* Parse the cap and config of a pcm */
 int tplg_parse_pcm_cap_cfg(snd_tplg_t *tplg, snd_config_t *cfg,
 	void *private)
 {
@@ -493,29 +450,7 @@ int tplg_parse_pcm_cap_cfg(snd_tplg_t *tplg, snd_config_t *cfg,
 	return 0;
 }
 
-/* Parse pcm
- *
- * SectionPCM."System Pin" {
- *
- *	index "1"
- *
- *	# used for binding to the PCM
- *	ID "0"
- *
- *	pcm."playback" {
- *		capabilities "System Playback"
- *		config "PCM 48k Stereo 24bit"
- *		config "PCM 48k Stereo 16bit"
- *	}
- *
- *	pcm."capture" {
- *		capabilities "Analog Capture"
- *		config "PCM 48k Stereo 24bit"
- *		config "PCM 48k Stereo 16bit"
- *		config "PCM 48k 2P/4C 16bit"
- *	}
- * }
- */
+/* Parse pcm */
 int tplg_parse_pcm(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)
 {
@@ -578,29 +513,7 @@ int tplg_parse_pcm(snd_tplg_t *tplg,
 	return 0;
 }
 
-/* Parse be
- *
- * SectionBE."SSP0-Codec" {
- *
- *	index "1"
- *
- *	# used for binding to the PCM
- *	ID "0"
- *
- *	be."playback" {
- *		capabilities "System Playback"
- *		config "PCM 48k Stereo 24bit"
- *		config "PCM 48k Stereo 16bit"
- *	}
- *
- *	be."capture" {
- *		capabilities "Analog Capture"
- *		config "PCM 48k Stereo 24bit"
- *		config "PCM 48k Stereo 16bit"
- *		config "PCM 48k 2P/4C 16bit"
- *	}
- * }
- */
+/* Parse be */
 int tplg_parse_be(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)
 {
@@ -663,35 +576,7 @@ int tplg_parse_be(snd_tplg_t *tplg,
 	return 0;
 }
 
-/* Parse cc
- *
- * SectionCC."FM-Codec" {
- *
- *	index "1"
- *
- *	# used for binding to the CC link
- *	ID "0"
- *
- *	# CC DAI link capabilities and supported configs
- *	cc."playback" {
- *
- *		capabilities "System playback"
- *
- *		configs [
- *			"PCM 48k Stereo 16bit"
- *		]
- *	}
- *
- *	cc."capture" {
- *
- *		capabilities "Analog capture"
- *
- *		configs [
- *			"PCM 48k Stereo 16bit"
- *		]
- *	}
- * }
- */
+/* Parse cc */
 int tplg_parse_cc(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)
 {

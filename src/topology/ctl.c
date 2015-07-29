@@ -203,12 +203,6 @@ int tplg_build_controls(snd_tplg_t *tplg)
  * Parse TLV of DBScale type.
  *
  * Parse DBScale describing min, step, mute in DB.
- *
- * scale {
- *		min "-9000"
- *		step "300"
- *		mute "1"
- * }
  */
 static int tplg_parse_tlv_dbscale(snd_config_t *cfg, struct tplg_elem *elem)
 {
@@ -260,17 +254,7 @@ static int tplg_parse_tlv_dbscale(snd_config_t *cfg, struct tplg_elem *elem)
 	return 0;
 }
 
-/* Parse TLV.
- *
- * Each TLV is described in new section
- * Supported TLV types: scale.
- *
- * SectionTLV."tlv name" {
- *		type {
- *
- *		}
- * }
- */
+/* Parse TLV */
 int tplg_parse_tlv(snd_tplg_t *tplg, snd_config_t *cfg,
 	void *private ATTRIBUTE_UNUSED)
 {
@@ -303,21 +287,7 @@ int tplg_parse_tlv(snd_tplg_t *tplg, snd_config_t *cfg,
 	return err;
 }
 
-/* Parse Control Bytes
- *
- * Each Control is described in new section
- * Supported control types: Byte
- *
- * SectionControlBytes."control name" {
- *	comment "optional comments"
- *
- *	index "1"
- *	base "0"
- *	num_regs "16"
- *	mask "0xff"
- *	max "255"
- * }
- */
+/* Parse Control Bytes */
 int tplg_parse_control_bytes(snd_tplg_t *tplg,
 	snd_config_t *cfg, void *private ATTRIBUTE_UNUSED)
 {
@@ -422,25 +392,7 @@ int tplg_parse_control_bytes(snd_tplg_t *tplg,
 	return 0;
 }
 
-/* Parse Control Enums.
- *
- * Enumerated control. Supports mutiple channels.
- *
- * SectionControlMixer."control name" {
- *	comment "optional comments"
- *
- *	index "1"
- *	texts "EQU1"
- *
- *	channel."name" {
- *	}
- *
- *	ops."ctl" {
- *	}
- *
- *	tlv "hsw_vol_tlv"
- * }
- */
+/* Parse Control Enums. */
 int tplg_parse_control_enum(snd_tplg_t *tplg, snd_config_t *cfg,
 	void *private ATTRIBUTE_UNUSED)
 {

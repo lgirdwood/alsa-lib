@@ -141,7 +141,7 @@ static int write_elem_block(snd_tplg_t *tplg,
 		if (elem->compound_elem)
 			continue;
 
-		if (elem->type != PARSER_TYPE_DAPM_GRAPH)
+		if (elem->type != OBJECT_TYPE_DAPM_GRAPH)
 			verbose(tplg, " %s '%s': write %d bytes\n",
 				obj_name, elem->id, elem->size);
 		else
@@ -202,34 +202,34 @@ static int write_block(snd_tplg_t *tplg, struct list_head *base,
 
 	/* write each elem for this block */
 	switch (type) {
-	case PARSER_TYPE_MIXER:
+	case OBJECT_TYPE_MIXER:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_MIXER, "mixer");
-	case PARSER_TYPE_BYTES:
+	case OBJECT_TYPE_BYTES:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_BYTES, "bytes");
-	case PARSER_TYPE_ENUM:
+	case OBJECT_TYPE_ENUM:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_ENUM, "enum");
-	case PARSER_TYPE_DAPM_GRAPH:
+	case OBJECT_TYPE_DAPM_GRAPH:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_DAPM_GRAPH, "route");
-	case PARSER_TYPE_DAPM_WIDGET:
+	case OBJECT_TYPE_DAPM_WIDGET:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_DAPM_WIDGET, "widget");
-	case PARSER_TYPE_PCM:
+	case OBJECT_TYPE_PCM:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_PCM, "pcm");
-	case PARSER_TYPE_BE:
+	case OBJECT_TYPE_BE:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_DAI_LINK, "be");
-	case PARSER_TYPE_CC:
+	case OBJECT_TYPE_CC:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_DAI_LINK, "cc");
-	case PARSER_TYPE_MANIFEST:
+	case OBJECT_TYPE_MANIFEST:
 		return write_data_block(tplg, size, SND_SOC_TPLG_TYPE_MANIFEST,
 			"manifest", &tplg->manifest);
-	case PARSER_TYPE_DATA:
+	case OBJECT_TYPE_DATA:
 		return write_elem_block(tplg, base, size,
 			SND_SOC_TPLG_TYPE_PDATA, "data");
 	default:
@@ -245,7 +245,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write manifest */
 	ret = write_data_block(tplg, sizeof(tplg->manifest),
-		PARSER_TYPE_MANIFEST, "manifest", &tplg->manifest);
+		OBJECT_TYPE_MANIFEST, "manifest", &tplg->manifest);
 	if (ret < 0) {
 		SNDERR("failed to write manifest %d\n", ret);
 		return ret;
@@ -253,7 +253,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write mixer elems. */
 	ret = write_block(tplg, &tplg->mixer_list,
-		PARSER_TYPE_MIXER);
+		OBJECT_TYPE_MIXER);
 	if (ret < 0) {
 		SNDERR("failed to write control elems %d\n", ret);
 		return ret;
@@ -261,7 +261,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write enum control elems. */
 	ret = write_block(tplg, &tplg->enum_list,
-		PARSER_TYPE_ENUM);
+		OBJECT_TYPE_ENUM);
 	if (ret < 0) {
 		SNDERR("failed to write control elems %d\n", ret);
 		return ret;
@@ -269,7 +269,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write bytes extended control elems. */
 	ret = write_block(tplg, &tplg->bytes_ext_list,
-		PARSER_TYPE_BYTES);
+		OBJECT_TYPE_BYTES);
 	if (ret < 0) {
 		SNDERR("failed to write control elems %d\n", ret);
 		return ret;
@@ -277,7 +277,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write widget elems */
 	ret = write_block(tplg, &tplg->widget_list,
-		PARSER_TYPE_DAPM_WIDGET);
+		OBJECT_TYPE_DAPM_WIDGET);
 	if (ret < 0) {
 		SNDERR("failed to write widget elems %d\n", ret);
 		return ret;
@@ -285,7 +285,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write pcm elems */
 	ret = write_block(tplg, &tplg->pcm_list,
-		PARSER_TYPE_PCM);
+		OBJECT_TYPE_PCM);
 	if (ret < 0) {
 		SNDERR("failed to write pcm elems %d\n", ret);
 		return ret;
@@ -293,7 +293,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write be elems */
 	ret = write_block(tplg, &tplg->be_list,
-		PARSER_TYPE_BE);
+		OBJECT_TYPE_BE);
 	if (ret < 0) {
 		SNDERR("failed to write be elems %d\n", ret);
 		return ret;
@@ -301,7 +301,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write cc elems */
 	ret = write_block(tplg, &tplg->cc_list,
-		PARSER_TYPE_CC);
+		OBJECT_TYPE_CC);
 	if (ret < 0) {
 		SNDERR("failed to write cc elems %d\n", ret);
 		return ret;
@@ -309,7 +309,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write route elems */
 	ret = write_block(tplg, &tplg->route_list,
-		PARSER_TYPE_DAPM_GRAPH);
+		OBJECT_TYPE_DAPM_GRAPH);
 	if (ret < 0) {
 		SNDERR("failed to write graph elems %d\n", ret);
 		return ret;
@@ -317,7 +317,7 @@ int tplg_write_data(snd_tplg_t *tplg)
 
 	/* write private data */
 	ret = write_block(tplg, &tplg->pdata_list,
-		PARSER_TYPE_DATA);
+		OBJECT_TYPE_DATA);
 	if (ret < 0) {
 		SNDERR("failed to write private data %d\n", ret);
 		return ret;

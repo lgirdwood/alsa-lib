@@ -103,7 +103,7 @@ struct tplg_elem *tplg_elem_lookup(struct list_head *base, const char* id,
 
 /* create a new common element and object */
 struct tplg_elem* tplg_elem_new_common(snd_tplg_t *tplg,
-	snd_config_t *cfg, enum parser_type type)
+	snd_config_t *cfg, enum object_type type)
 {
 	struct tplg_elem *elem;
 	const char *id;
@@ -119,21 +119,21 @@ struct tplg_elem* tplg_elem_new_common(snd_tplg_t *tplg,
 	elem->id[SNDRV_CTL_ELEM_ID_NAME_MAXLEN - 1] = 0;
 
 	switch (type) {
-	case PARSER_TYPE_DATA:
+	case OBJECT_TYPE_DATA:
 		list_add_tail(&elem->list, &tplg->pdata_list);
 		break;
-	case PARSER_TYPE_TEXT:
+	case OBJECT_TYPE_TEXT:
 		list_add_tail(&elem->list, &tplg->text_list);
 		break;
-	case PARSER_TYPE_TLV:
+	case OBJECT_TYPE_TLV:
 		list_add_tail(&elem->list, &tplg->tlv_list);
 		elem->size = sizeof(struct snd_soc_tplg_ctl_tlv);
 		break;
-	case PARSER_TYPE_BYTES:
+	case OBJECT_TYPE_BYTES:
 		list_add_tail(&elem->list, &tplg->bytes_ext_list);
 		obj_size = sizeof(struct snd_soc_tplg_bytes_control);
 		break;
-	case PARSER_TYPE_ENUM:
+	case OBJECT_TYPE_ENUM:
 		list_add_tail(&elem->list, &tplg->enum_list);
 		obj_size = sizeof(struct snd_soc_tplg_enum_control);
 		break;
@@ -141,27 +141,27 @@ struct tplg_elem* tplg_elem_new_common(snd_tplg_t *tplg,
 		list_add_tail(&elem->list, &tplg->mixer_list);
 		obj_size = sizeof(struct snd_soc_tplg_mixer_control);
 		break;
-	case PARSER_TYPE_DAPM_WIDGET:
+	case OBJECT_TYPE_DAPM_WIDGET:
 		list_add_tail(&elem->list, &tplg->widget_list);
 		obj_size = sizeof(struct snd_soc_tplg_dapm_widget);
 		break;
-	case PARSER_TYPE_STREAM_CONFIG:
+	case OBJECT_TYPE_STREAM_CONFIG:
 		list_add_tail(&elem->list, &tplg->pcm_config_list);
 		obj_size = sizeof(struct snd_soc_tplg_stream_config);
 		break;
-	case PARSER_TYPE_STREAM_CAPS:
+	case OBJECT_TYPE_STREAM_CAPS:
 		list_add_tail(&elem->list, &tplg->pcm_caps_list);
 		obj_size = sizeof(struct snd_soc_tplg_stream_caps);
 		break;
-	case PARSER_TYPE_PCM:
+	case OBJECT_TYPE_PCM:
 		list_add_tail(&elem->list, &tplg->pcm_list);
 		obj_size = sizeof(struct snd_soc_tplg_pcm_dai);
 		break;
-	case PARSER_TYPE_BE:
+	case OBJECT_TYPE_BE:
 		list_add_tail(&elem->list, &tplg->be_list);
 		obj_size = sizeof(struct snd_soc_tplg_pcm_dai);
 		break;
-	case PARSER_TYPE_CC:
+	case OBJECT_TYPE_CC:
 		list_add_tail(&elem->list, &tplg->cc_list);
 		obj_size = sizeof(struct snd_soc_tplg_pcm_dai);
 		break;

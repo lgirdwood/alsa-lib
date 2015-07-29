@@ -74,7 +74,7 @@ static int tplg_parse_dapm_mixers(snd_config_t *cfg, struct tplg_elem *elem)
 		if (snd_config_get_string(n, &value) < 0)
 			continue;
 
-		tplg_ref_add(elem, PARSER_TYPE_MIXER, value);
+		tplg_ref_add(elem, OBJECT_TYPE_MIXER, value);
 		tplg_dbg("\t\t %s\n", value);
 	}
 
@@ -96,7 +96,7 @@ static int tplg_parse_dapm_enums(snd_config_t *cfg, struct tplg_elem *elem)
 		if (snd_config_get_string(n, &value) < 0)
 			continue;
 
-		tplg_ref_add(elem, PARSER_TYPE_ENUM, value);
+		tplg_ref_add(elem, OBJECT_TYPE_ENUM, value);
 		tplg_dbg("\t\t %s\n", value);
 	}
 
@@ -122,9 +122,9 @@ static int copy_dapm_control(struct tplg_elem *elem, struct tplg_elem *ref)
 	elem->widget = widget;
 
 	/* copy new widget at the end */
-	if (ref->type == PARSER_TYPE_MIXER)
+	if (ref->type == OBJECT_TYPE_MIXER)
 		memcpy((void*)widget + elem->size, mixer_ctrl, ref->size);
-	else if (ref->type == PARSER_TYPE_ENUM)
+	else if (ref->type == OBJECT_TYPE_ENUM)
 		memcpy((void*)widget + elem->size, enum_ctrl, ref->size);
 
 	elem->size += ref->size;
@@ -151,23 +151,23 @@ static int tplg_build_widget(snd_tplg_t *tplg,
 			continue;
 
 		switch (ref->type) {
-		case PARSER_TYPE_MIXER:
+		case OBJECT_TYPE_MIXER:
 			ref->elem = tplg_elem_lookup(&tplg->mixer_list,
-						ref->id, PARSER_TYPE_MIXER);
+						ref->id, OBJECT_TYPE_MIXER);
 			if (ref->elem)
 				err = copy_dapm_control(elem, ref->elem);
 			break;
 
-		case PARSER_TYPE_ENUM:
+		case OBJECT_TYPE_ENUM:
 			ref->elem = tplg_elem_lookup(&tplg->enum_list,
-						ref->id, PARSER_TYPE_ENUM);
+						ref->id, OBJECT_TYPE_ENUM);
 			if (ref->elem)
 				err = copy_dapm_control(elem, ref->elem);
 			break;
 
-		case PARSER_TYPE_DATA:
+		case OBJECT_TYPE_DATA:
 			ref->elem = tplg_elem_lookup(&tplg->pdata_list,
-						ref->id, PARSER_TYPE_DATA);
+						ref->id, OBJECT_TYPE_DATA);
 			if (ref->elem)
 				err = tplg_copy_data(elem, ref->elem);
 			break;
@@ -200,7 +200,7 @@ int tplg_build_widgets(snd_tplg_t *tplg)
 	list_for_each(pos, base) {
 
 		elem = list_entry(pos, struct tplg_elem, list);
-		if (!elem->widget || elem->type != PARSER_TYPE_DAPM_WIDGET) {
+		if (!elem->widget || elem->type != OBJECT_TYPE_DAPM_WIDGET) {
 			SNDERR("error: invalid widget '%s'\n",
 				elem->id);
 			return -EINVAL;
@@ -228,7 +228,7 @@ int tplg_build_routes(snd_tplg_t *tplg)
 	list_for_each(pos, base) {
 		elem = list_entry(pos, struct tplg_elem, list);
 
-		if (!elem->route || elem->type != PARSER_TYPE_DAPM_GRAPH) {
+		if (!elem->route || elem->type != OBJECT_TYPE_DAPM_GRAPH) {
 			SNDERR("error: invalid route '%s'\n",
 				elem->id);
 			return -EINVAL;
@@ -245,7 +245,7 @@ int tplg_build_routes(snd_tplg_t *tplg)
 
 		}
 		if (!tplg_elem_lookup(&tplg->widget_list, route->sink,
-			PARSER_TYPE_DAPM_WIDGET)) {
+			OBJECT_TYPE_DAPM_WIDGET)) {
 			SNDERR("warning: undefined sink widget/stream '%s'\n",
 				route->sink);
 		}
@@ -253,9 +253,9 @@ int tplg_build_routes(snd_tplg_t *tplg)
 		/* validate control name */
 		if (strlen(route->control)) {
 			if (!tplg_elem_lookup(&tplg->mixer_list,
-				route->control, PARSER_TYPE_MIXER) &&
+				route->control, OBJECT_TYPE_MIXER) &&
 			!tplg_elem_lookup(&tplg->enum_list,
-				route->control, PARSER_TYPE_ENUM)) {
+				route->control, OBJECT_TYPE_ENUM)) {
 				SNDERR("warning: Undefined mixer/enum control '%s'\n",
 					route->control);
 			}
@@ -268,7 +268,7 @@ int tplg_build_routes(snd_tplg_t *tplg)
 
 		}
 		if (!tplg_elem_lookup(&tplg->widget_list, route->source,
-			PARSER_TYPE_DAPM_WIDGET)) {
+			OBJECT_TYPE_DAPM_WIDGET)) {
 			SNDERR("warning: Undefined source widget/stream '%s'\n",
 				route->source);
 		}
@@ -352,7 +352,7 @@ static int tplg_parse_routes(snd_tplg_t *tplg, snd_config_t *cfg)
 
 		list_add_tail(&elem->list, &tplg->route_list);
 		strcpy(elem->id, "line");
-		elem->type = PARSER_TYPE_DAPM_GRAPH;
+		elem->type = OBJECT_TYPE_DAPM_GRAPH;
 		elem->size = sizeof(*line);
 
 		line = calloc(1, sizeof(*line));
@@ -420,7 +420,7 @@ int tplg_parse_dapm_widget(snd_tplg_t *tplg,
 	const char *id, *val = NULL;
 	int widget_type, err;
 
-	elem = tplg_elem_new_common(tplg, cfg, PARSER_TYPE_DAPM_WIDGET);
+	elem = tplg_elem_new_common(tplg, cfg, OBJECT_TYPE_DAPM_WIDGET);
 	if (!elem)
 		return -ENOMEM;
 
@@ -552,7 +552,7 @@ int tplg_parse_dapm_widget(snd_tplg_t *tplg,
 			if (snd_config_get_string(n, &val) < 0)
 				return -EINVAL;
 
-			tplg_ref_add(elem, PARSER_TYPE_DATA, val);
+			tplg_ref_add(elem, OBJECT_TYPE_DATA, val);
 			tplg_dbg("\t%s: %s\n", id, val);
 			continue;
 		}

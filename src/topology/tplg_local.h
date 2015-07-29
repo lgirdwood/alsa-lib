@@ -41,21 +41,21 @@ struct tplg_ref;
 struct tplg_elem;
 
 /* internal topology object type not used by kernel */
-enum parser_type {
-	PARSER_TYPE_TLV = 0,
-	PARSER_TYPE_MIXER,
-	PARSER_TYPE_ENUM,
-	PARSER_TYPE_TEXT,
-	PARSER_TYPE_DATA,
-	PARSER_TYPE_BYTES,
-	PARSER_TYPE_STREAM_CONFIG,
-	PARSER_TYPE_STREAM_CAPS,
-	PARSER_TYPE_PCM,
-	PARSER_TYPE_DAPM_WIDGET,
-	PARSER_TYPE_DAPM_GRAPH,
-	PARSER_TYPE_BE,
-	PARSER_TYPE_CC,
-	PARSER_TYPE_MANIFEST,
+enum object_type {
+	OBJECT_TYPE_TLV = 0,
+	OBJECT_TYPE_MIXER,
+	OBJECT_TYPE_ENUM,
+	OBJECT_TYPE_TEXT,
+	OBJECT_TYPE_DATA,
+	OBJECT_TYPE_BYTES,
+	OBJECT_TYPE_STREAM_CONFIG,
+	OBJECT_TYPE_STREAM_CAPS,
+	OBJECT_TYPE_PCM,
+	OBJECT_TYPE_DAPM_WIDGET,
+	OBJECT_TYPE_DAPM_GRAPH,
+	OBJECT_TYPE_BE,
+	OBJECT_TYPE_CC,
+	OBJECT_TYPE_MANIFEST,
 };
 
 struct snd_tplg {
@@ -113,7 +113,7 @@ struct tplg_elem {
 	char texts[SND_SOC_TPLG_NUM_TEXTS][SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
 
 	int index;
-	enum parser_type type;
+	enum object_type type;
 
 	int size; /* total size of this object inc pdata and ref objects */
 	int compound_elem; /* dont write this element as individual elem */
@@ -216,7 +216,7 @@ struct tplg_elem *tplg_elem_lookup(struct list_head *base,
 				const char* id,
 				unsigned int type);
 struct tplg_elem* tplg_elem_new_common(snd_tplg_t *tplg,
-	snd_config_t *cfg, enum parser_type type);
+	snd_config_t *cfg, enum object_type type);
 
 static inline void elem_copy_text(char *dest, const char *src, int len)
 {

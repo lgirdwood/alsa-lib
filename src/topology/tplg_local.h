@@ -34,6 +34,10 @@
 #define ALSA_TPLG_DIR	ALSA_CONFIG_DIR "/topology"
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
+#define container_of(ptr, type, member) ({                      \
+	 const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+	(type *)( (char *)__mptr - offsetof(type,member) );})
+
 /** The name of the environment variable containing the tplg directory */
 #define ALSA_CONFIG_TPLG_VAR "ALSA_CONFIG_TPLG"
 
@@ -216,3 +220,9 @@ int tplg_parse_ops(snd_tplg_t *tplg ATTRIBUTE_UNUSED,
 
 struct tplg_elem *lookup_pcm_dai_stream(struct list_head *base,
 	const char* id);
+
+int tplg_add_mixer_object(snd_tplg_t *tplg, snd_tplg_obj_template_t *t);
+int tplg_add_enum_object(snd_tplg_t *tplg, snd_tplg_obj_template_t *t);
+int tplg_add_bytes_object(snd_tplg_t *tplg, snd_tplg_obj_template_t *t);
+int tplg_add_widget_object(snd_tplg_t *tplg, snd_tplg_obj_template_t *t);
+int tplg_add_graph_object(snd_tplg_t *tplg, snd_tplg_obj_template_t *t);

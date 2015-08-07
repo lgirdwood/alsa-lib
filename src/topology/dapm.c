@@ -160,6 +160,10 @@ static int tplg_build_widget(snd_tplg_t *tplg,
 				err = copy_dapm_control(elem, ref->elem);
 			break;
 
+		case SND_TPLG_TYPE_BYTES:
+			if (!ref->elem)
+				ref->elem = tplg_elem_lookup(&tplg->bytes_ext_list,
+						ref->id, SND_TPLG_TYPE_BYTES);
 			if (ref->elem)
 				err = copy_dapm_control(elem, ref->elem);
 			break;

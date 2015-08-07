@@ -40,24 +40,6 @@
 struct tplg_ref;
 struct tplg_elem;
 
-/* internal topology object type not used by kernel */
-enum object_type {
-	OBJECT_TYPE_TLV = 0,
-	OBJECT_TYPE_MIXER,
-	OBJECT_TYPE_ENUM,
-	OBJECT_TYPE_TEXT,
-	OBJECT_TYPE_DATA,
-	OBJECT_TYPE_BYTES,
-	OBJECT_TYPE_STREAM_CONFIG,
-	OBJECT_TYPE_STREAM_CAPS,
-	OBJECT_TYPE_PCM,
-	OBJECT_TYPE_DAPM_WIDGET,
-	OBJECT_TYPE_DAPM_GRAPH,
-	OBJECT_TYPE_BE,
-	OBJECT_TYPE_CC,
-	OBJECT_TYPE_MANIFEST,
-};
-
 struct snd_tplg {
 
 	/* opaque vendor data */
@@ -114,7 +96,7 @@ struct tplg_elem {
 	char texts[SND_SOC_TPLG_NUM_TEXTS][SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
 
 	int index;
-	enum object_type type;
+	enum snd_tplg_type type;
 
 	int size; /* total size of this object inc pdata and ref objects */
 	int compound_elem; /* dont write this element as individual elem */
@@ -209,6 +191,7 @@ int tplg_build_pcm_dai(snd_tplg_t *tplg, unsigned int type);
 int tplg_copy_data(struct tplg_elem *elem, struct tplg_elem *ref);
 
 int tplg_ref_add(struct tplg_elem *elem, int type, const char* id);
+int tplg_ref_add_elem(struct tplg_elem *elem, struct tplg_elem *elem_ref);
 
 struct tplg_elem *tplg_elem_new(void);
 void tplg_elem_free(struct tplg_elem *elem);
@@ -217,7 +200,7 @@ struct tplg_elem *tplg_elem_lookup(struct list_head *base,
 				const char* id,
 				unsigned int type);
 struct tplg_elem* tplg_elem_new_common(snd_tplg_t *tplg,
-	snd_config_t *cfg, const char *name, enum object_type type);
+	snd_config_t *cfg, const char *name, enum snd_tplg_type type);
 
 static inline void elem_copy_text(char *dest, const char *src, int len)
 {

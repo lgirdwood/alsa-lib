@@ -121,13 +121,10 @@ static int copy_dapm_control(struct tplg_elem *elem, struct tplg_elem *ref)
 
 	elem->widget = widget;
 
-	/* copy new widget at the end */
-	if (ref->type == OBJECT_TYPE_MIXER)
-		memcpy((void*)widget + elem->size, mixer_ctrl, ref->size);
-	else if (ref->type == OBJECT_TYPE_ENUM)
-		memcpy((void*)widget + elem->size, enum_ctrl, ref->size);
-
+	/* append the control to the end of the widget */
+	memcpy((void*)widget + elem->size, ref->obj, ref->size);
 	elem->size += ref->size;
+
 	widget->num_kcontrols++;
 	ref->compound_elem = 1;
 	return 0;
